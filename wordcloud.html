@@ -17,7 +17,7 @@
     <script>
         async function loadWordCloud() {
             const list = []
-            const response = await fetch("input.json"); //fill in json file
+            const response = await fetch("/get_words"); //fill in json file
             const data = await response.json(); //take data from json
             for (const item of data) {
                 list.push([item.word, item.value]); //see what json is labelled as
