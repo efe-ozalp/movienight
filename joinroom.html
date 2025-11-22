@@ -21,15 +21,38 @@
     <div class="join-container">
         <h1 class="join-title">Join a Room</h1>
 
-        <input 
-            class="room-input" 
-            type="text" 
-            placeholder="Enter room code…" 
-        />
+        
 
-        <button class="join-btn">Join</button>
+        <input id="roomCode" class="room-input" type="text" placeholder="Enter room code…" />
+        <button id="joinButton" class="join-btn">Join</button>
+
 
     </div>
 
 </body>
 </html>
+<script>
+
+const input = document.getElementById("roomCode");
+const joinBtn = document.getElementById("joinButton");
+
+function attemptJoin() {
+    const enteredCode = input.value.trim();
+
+    if (enteredCode.toUpperCase() === "MADS") {
+        window.location.href = "voteroom.html";
+    } else {
+        alert("Invalid room code. Try again!");
+    }
+}
+
+
+joinBtn.addEventListener("click", attemptJoin);
+
+
+input.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        attemptJoin();
+    }
+});
+</script>
