@@ -1,12 +1,18 @@
 {
-  "name": "movienight",
+  "name": "movie-app",
   "version": "1.0.0",
-  "description": "Movie night voting app",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^17.2.3",
+    "firebase": "^12.6.0",
+    "node-fetch": "^3.3.2"
   }
 }

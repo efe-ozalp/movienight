@@ -8,9 +8,9 @@ const bannedWords = [
   "cunt",
   "slut",
   "whore",
-  "douchebag",
-  "retard",
-  "dumbass"
+    "douchebag",
+    "retard",
+    "dumbass"
 ];
 
 function containsBannedWord(text) {
