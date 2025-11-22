@@ -143,6 +143,10 @@ body {
 }
 
 /* Text input */
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Text field */
 .room-input {
     width: 260px;
     padding: 14px 18px;
@@ -175,7 +179,7 @@ body {
     box-shadow: 0 12px 22px rgba(255, 170, 100, 0.35);
 }
 
-/* Top-left Back Button */
+/* Top-left Back Button */s
 .back-btn {
     position: absolute;
     top: 20px;
