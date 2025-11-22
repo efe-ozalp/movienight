@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vote Room</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="custom-option-container">
+    <h3>Add a Custom Movie or Snack</h3>
+
+    <form id="optionForm" class="input-area">
+      <input 
+        id="optionInput"
+        type="text" 
+        name="customOption" 
+        placeholder="Type a movie or snack..."
+        required
+      >
+      <button type="submit">Add</button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <ul id="optionsList" class="options-list"></ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
