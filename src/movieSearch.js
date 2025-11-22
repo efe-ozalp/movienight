@@ -1,6 +1,5 @@
-import fetch from "node-fetch"; // Only needed if Node <18
-import 'dotenv/config';
-const TMDB_KEY = process.env.TMDB_KEY;
+
+const TMDB_KEY = "b469977fea8697c85b84fbad89a57be4"
 
 const themeToGenreId = {
   romantic: 10749,
