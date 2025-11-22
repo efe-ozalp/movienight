@@ -1,0 +1,19 @@
+// Add this script to your HTML file
+
+document.getElementById('optionForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const input = document.getElementById('optionInput');
+  const value = input.value.trim();
+  const message = document.getElementById('message');
+  const list = document.getElementById('optionsList');
+
+  if (value) {
+    const li = document.createElement('li');
+    li.textContent = value;
+    list.appendChild(li);
+    message.textContent = 'Added!';
+    input.value = '';
+  } else {
+    message.textContent = 'enter text.';
+  }
+});
