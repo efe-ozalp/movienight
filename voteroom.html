@@ -1,19 +1,31 @@
-// Add this script to your HTML file
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vote Room</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-document.getElementById('optionForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const input = document.getElementById('optionInput');
-  const value = input.value.trim();
-  const message = document.getElementById('message');
-  const list = document.getElementById('optionsList');
+  <div class="custom-option-container">
+    <h3>Add a Custom Movie or Snack</h3>
 
-  if (value) {
-    const li = document.createElement('li');
-    li.textContent = value;
-    list.appendChild(li);
-    message.textContent = 'Added!';
-    input.value = '';
-  } else {
-    message.textContent = 'enter text.';
-  }
-});
+    <form id="optionForm" class="input-area">
+      <input 
+        id="optionInput"
+        type="text" 
+        name="customOption" 
+        placeholder="Type a movie or snack..."
+        required
+      >
+      <button type="submit">Add</button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <ul id="optionsList" class="options-list"></ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
