@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Results - Movie Night</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        .results-container {
+            max-width: 1200px;
+            width: 95%;
+            padding: 30px;
+            background: rgba(20, 15, 12, 0.65);
+            border-radius: 18px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            margin: 50px auto;
+        }
+
+        .results-title {
+            color: #fff5eb;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.45);
+        }
+
+        .themes-display {
+            text-align: center;
+            color: #ffd9a1;
+            font-size: 1.1rem;
+            margin: 20px 0 30px 0;
+            padding: 15px;
+            background: rgba(255, 180, 108, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 180, 108, 0.2);
+        }
+
+        .loading {
+            text-align: center;
+            color: #fce9d6;
+            font-size: 1.3rem;
+            padding: 40px;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 180, 108, 0.4);
+            box-shadow: 0 12px 25px rgba(255, 180, 108, 0.2);
+        }
+
+        .movie-poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .movie-title {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            min-height: 2.6em;
+        }
+
+        .movie-rating {
+            color: #ffd9a1;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #fce9d6;
+            font-size: 1.2rem;
+            padding: 50px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            color: #2d1a0e;
+            background: linear-gradient(135deg, #6a9fb5, #5a8fa5);
+            box-shadow: 0 6px 15px rgba(106, 159, 181, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(106, 159, 181, 0.35);
+        }
+    </style>
+</head>
+
+<body class="join-body">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        ⟵ Home
+    </button>
+
+    <div class="results-container">
+        <h1 class="results-title"> Tonight's Picks</h1>
+
+        <div id="themesDisplay" class="themes-display" style="display: none;">
+            <strong>Based on your group's themes:</strong>
+            <div id="themesList"></div>
+        </div>
+
+        <div id="loading" class="loading">
+             Finding the perfect movies for your group...
+        </div>
+
+        <div id="movieGrid" class="movie-grid"></div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            No movies found for these themes. Try adding different themes or check back later!
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-secondary" onclick="window.location.href='voteroom.html'">
+                ← Add More Themes
+            </button>
+            <button class="btn-secondary" onclick="refreshResults()">
+                🔄 Refresh Results
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAgU-BASJed3cRgkNTqJ-rBuUSKXjOgksc",
+            authDomain: "movie-project-app-99b5d.firebaseapp.com",
+            projectId: "movie-project-app-99b5d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+    
+        const TMDB_KEY = "b469977fea8697c85b84fbad89a57be4";
+
+
+        const ROOM_ID = "MADS";
+
+        const themeToGenreId = {
+            romantic: 10749,
+            romance: 10749,
+            comedy: 35,
+            funny: 35,
+            thriller: 53,
+            suspense: 53,
+            family: 10751,
+            "found family": 10751,
+            action: 28,
+            mystery: 9648,
+            horror: 27,
+            scary: 27,
+            fantasy: 14,
+            scifi: 878,
+            "sci-fi": 878,
+            adventure: 12,
+            drama: 18,
+            crime: 80,
+            documentary: 99,
+            animation: 16,
+            war: 10752,
+            western: 37
+        };
+
+        async function getMovieResults() {
+            try {
+                const suggestionsRef = collection(db, "rooms", ROOM_ID, "suggestions");
+                const snap = await getDocs(suggestionsRef);
+
+                if (snap.empty) {
+                    document.getElementById('loading').textContent = 
+                        'No themes submitted yet. Add some themes first!';
+                    return;
+                }
+
+                // Count theme votes
+                const themeCounts = {};
+                snap.forEach((doc) => {
+                    const themes = doc.data().themes || [];
+                    themes.forEach((theme) => {
+                        themeCounts[theme] = (themeCounts[theme] || 0) + 1;
+                    });
+                });
+
+                const topThemes = Object.entries(themeCounts)
+                    .map(([theme, votes]) => ({ theme, votes }))
+                    .sort((a, b) => b.votes - a.votes)
+                    .slice(0, 6);
+
+        
+                const themesDisplay = document.getElementById('themesDisplay');
+                const themesList = document.getElementById('themesList');
+                themesList.innerHTML = topThemes
+                    .map(t => `<span style="margin: 0 8px;">${t.theme} (${t.votes} vote${t.votes > 1 ? 's' : ''})</span>`)
+                    .join('•');
+                themesDisplay.style.display = 'block';
+
+            
+                const genreIds = topThemes
+                    .map(t => themeToGenreId[t.theme.toLowerCase().trim()])
+                    .filter(Boolean)
+                    .slice(0, 3);
+
+                if (genreIds.length === 0) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('noResults').style.display = 'block';
+                    return;
+                }
+
+                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&with_genres=${genreIds.join(',')}&sort_by=popularity.desc&vote_average.gte=6&vote_count.gte=100`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (data.results && data.results.length > 0) {
+                    displayMovies(data.results.slice(0, 12));
+                } else {
+                    document.getElementById('noResults').style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Error fetching results:', error);
+                document.getElementById('loading').textContent = 
+                    'Error loading movies. Please try again or check your TMDB API key.';
+            }
+        }
+
+        function displayMovies(movies) {
+            const grid = document.getElementById('movieGrid');
+            grid.innerHTML = '';
+
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+
+                const posterUrl = movie.poster_path 
+                    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+                    : 'https://via.placeholder.com/300x450/1a1a1a/ffffff?text=No+Poster';
+
+                card.innerHTML = `
+                    <img src="${posterUrl}" 
+                         alt="${movie.title}"
+                         class="movie-poster"
+                         onerror="this.src='https://via.placeholder.com/300x450/1a1a1a/ffffff?text=No+Poster'">
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="movie-rating">⭐ ${movie.vote_average.toFixed(1)}</div>
+                `;
+
+                card.onclick = () => {
+                    window.open(`https://www.themoviedb.org/movie/${movie.id}`, '_blank');
+                };
+
+                grid.appendChild(card);
+            });
+        }
+
+        window.refreshResults = () => {
+            location.reload();
+        };
+        getMovieResults();
+    </script>
+</body>
+</html>
