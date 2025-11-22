@@ -4,16 +4,27 @@ const TMDB_KEY = process.env.TMDB_KEY;
 
 const themeToGenreId = {
   romantic: 10749,
+  romance: 10749,
   comedy: 35,
+  funny: 35,
   thriller: 53,
+  suspense: 53,
   "found family": 10751,
+  family: 10751,
   action: 28,
   mystery: 9648,
   horror: 27,
+  scary: 27,
   fantasy: 14,
   sciFi: 878,
+  "sci-fi": 878,
   adventure: 12,
   drama: 18,
+  crime: 80,
+  documentary: 99,
+  animation: 16,
+  war: 10752,
+  western: 37,
 };
 
 // ---------------------------
