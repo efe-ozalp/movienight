@@ -1,13 +1,13 @@
 const bannedWords = [
   "shit",
   "fuck",
-  "bitch"
+  "bitch",
   "asshole",
-    "dick",
-    "pussy",
-    "cunt",
-    "slut",
-    "whore",
+  "dick",
+  "pussy",
+  "cunt",
+  "slut",
+  "whore",
     "douchebag",
     "retard",
     "dumbass"
