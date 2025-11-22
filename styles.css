@@ -114,7 +114,7 @@ body {
     top: 0;
     width: 50%;
     height: 100%;
-    background: url("https://i.imgur.com/JKcS8N3.jpeg") center/cover no-repeat;
+    background: url("https://unsplash.com/photos/closeup-photo-of-red-rod-pocket-curtain-4PxJ_9wEQyIeg") center/cover no-repeat;
     animation: curtain-open 1.8s ease forwards;
     z-index: 5;
 }
