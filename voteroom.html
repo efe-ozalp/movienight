@@ -2,8 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Vote Room</title>
+  <title>Vote Room & Word Cloud</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.1.1/wordcloud2.min.js"></script>
+  <style>
+    #cloud_canvas {
+      width: 100%;
+      max-width: 700px;
+      height: 500px;
+      margin: 30px auto;
+      display: block;
+      border: 1px solid #ddd;
+      background-color: #f5f5f5;
+    }
+    .wordcloud-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
 
@@ -26,6 +42,106 @@
     <ul id="optionsList" class="options-list"></ul>
   </div>
 
-  <script src="app.js"></script>
+  <!-- Word Cloud Section -->
+  <div class="wordcloud-container">
+    <h2>Word Cloud</h2>
+    <canvas id="cloud_canvas"></canvas>
+  </div>
+
+  <script>
+    const bannedWords = [
+      "shit","fuck","bitch","asshole","dick","pussy",
+      "cunt","slut","whore","douchebag","retard","dumbass"
+    ];
+
+    function containsBannedWord(text) {
+      const lower = text.toLowerCase();
+      return bannedWords.some(word => lower.includes(word));
+    }
+
+    function clearCanvas() {
+      const canvas = document.getElementById("cloud_canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    async function loadWordCloud() {
+      clearCanvas();
+      const response = await fetch("/get_words");
+      const data = await response.json();
+
+      const list = data.map(item => [item.word, item.value * 10]);
+
+      if(list.length > 0) {
+        WordCloud(document.getElementById("cloud_canvas"), {
+          list: list,
+          weightFactor: 10,
+          backgroundColor: '#f5f5f5'
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("optionForm");
+      const input = document.getElementById("optionInput");
+      const message = document.getElementById("message");
+      const list = document.getElementById("optionsList");
+
+      // Load initial data
+      loadWordCloud();
+      fetch("/get_words")
+        .then(res => res.json())
+        .then(data => {
+          data.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `${item.word}: ${item.value}`;
+            list.appendChild(li);
+          });
+        });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const value = input.value.trim();
+
+        if (!value) {
+          message.textContent = "Please enter text.";
+          message.className = "message error";
+          return;
+        }
+
+        if (containsBannedWord(value)) {
+          message.textContent = "That option includes inappropriate language.";
+          message.className = "message error";
+          return;
+        }
+
+        const response = await fetch("/add-word", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ word: value })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          list.innerHTML = "";
+          result.data.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `${item.word}: ${item.value}`;
+            list.appendChild(li);
+          });
+
+          message.textContent = "Added!";
+          message.className = "message success";
+          input.value = "";
+
+          // Update word cloud
+          loadWordCloud();
+        }
+      });
+    });
+  </script>
+
 </body>
 </html>
+

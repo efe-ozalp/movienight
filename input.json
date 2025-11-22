@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "word": "a",
+    "value": 5
+  },
+  {
+    "word": "b",
+    "value": 1
+  },
+  {
+    "word": "f",
+    "value": 1
+  },
+  {
+    "word": "r",
+    "value": 2
+  }
+]
