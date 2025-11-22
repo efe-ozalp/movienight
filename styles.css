@@ -1,0 +1,71 @@
+/* ----- Results Page ----- */
+
+.results-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.results-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.results-section {
+  margin-top: 25px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 20px;
+}
+
+.winner-card {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.winner-label {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.winner-value {
+  margin: 5px 0 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.winner-subtext {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.results-list li {
+  padding: 8px 10px;
+  background: #fafafa;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.option-name {
+  font-weight: 500;
+}
+
+.option-votes {
+  color: #555;
+  font-size: 0.9rem;
+}

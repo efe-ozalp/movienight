@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Voting Results</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="results-container">
+    <h1>Movie Night Results</h1>
+
+    <!-- Winning Movie -->
+    <section class="results-section">
+      <h2>Winning Movie</h2>
+      <div class="winner-card">
+        <p class="winner-label">Movie:</p>
+        <p id="winnerMovie" class="winner-value">TBD</p>
+        <p id="winnerMovieVotes" class="winner-subtext"></p>
+      </div>
+
+      <h3>All Movie Votes</h3>
+      <ul id="movieResultsList" class="results-list">
+        <!-- JS will inject items -->
+      </ul>
+    </section>
+
+  </div>
+
+  <script src="results.js"></script>
+</body>
+</html>
