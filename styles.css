@@ -74,6 +74,7 @@ body {
     gap: 30px;
 }
 
+
 .btn {
     padding: 16px 40px;
     font-size: 1.3rem;
@@ -98,6 +99,27 @@ body {
 
 .btn.join:hover {
     background: linear-gradient(135deg, #ffd6c2, #ff9f8b);
+}
+
+.generateMovieBtn {
+    padding: 14px 38px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    color: #2d1a0e;
+
+    background: linear-gradient(135deg, #ffddb0, #ffb46c);
+    box-shadow: 0 8px 20px rgba(255, 180, 110, 0.25);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.generateMovieBtn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 12px 26px rgba(255, 180, 110, 0.35);
+    background: linear-gradient(135deg, #ffe8c6, #ffc385);
 }
 
 /* ------------------------------------------------ */
