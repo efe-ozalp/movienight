@@ -6,6 +6,7 @@
     <title>Movie Results - Movie Night</title>
     <link rel="stylesheet" href="styles.css" />
     <style>
+        
         .results-container {
             max-width: 1200px;
             width: 95%;
@@ -123,6 +124,12 @@
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(106, 159, 181, 0.35);
         }
+        .join-body {
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 100vh;
+        align-items: flex-start !important;
+    }
     </style>
 </head>
 
@@ -159,148 +166,123 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+    <script>
+    const TMDB_KEY = "b469977fea8697c85b84fbad89a57be4";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAgU-BASJed3cRgkNTqJ-rBuUSKXjOgksc",
-            authDomain: "movie-project-app-99b5d.firebaseapp.com",
-            projectId: "movie-project-app-99b5d"
-        };
+    const themeToGenreId = {
+        romantic: 10749,
+        romance: 10749,
+        comedy: 35,
+        funny: 35,
+        thriller: 53,
+        suspense: 53,
+        family: 10751,
+        "found family": 10751,
+        action: 28,
+        mystery: 9648,
+        horror: 27,
+        scary: 27,
+        fantasy: 14,
+        scifi: 878,
+        "sci-fi": 878,
+        adventure: 12,
+        drama: 18,
+        crime: 80,
+        documentary: 99,
+        animation: 16,
+        war: 10752,
+        western: 37
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    async function getMovieResults() {
+        try {
+            // ⬇️ LOAD FROM YOUR JSON BACKEND, NOT FIRESTORE
+            const response = await fetch("/get_words");
+            const data = await response.json();
 
-    
-        const TMDB_KEY = "b469977fea8697c85b84fbad89a57be4";
-
-
-        const ROOM_ID = "MADS";
-
-        const themeToGenreId = {
-            romantic: 10749,
-            romance: 10749,
-            comedy: 35,
-            funny: 35,
-            thriller: 53,
-            suspense: 53,
-            family: 10751,
-            "found family": 10751,
-            action: 28,
-            mystery: 9648,
-            horror: 27,
-            scary: 27,
-            fantasy: 14,
-            scifi: 878,
-            "sci-fi": 878,
-            adventure: 12,
-            drama: 18,
-            crime: 80,
-            documentary: 99,
-            animation: 16,
-            war: 10752,
-            western: 37
-        };
-
-        async function getMovieResults() {
-            try {
-                const suggestionsRef = collection(db, "rooms", ROOM_ID, "suggestions");
-                const snap = await getDocs(suggestionsRef);
-
-                if (snap.empty) {
-                    document.getElementById('loading').textContent = 
-                        'No themes submitted yet. Add some themes first!';
-                    return;
-                }
-
-                // Count theme votes
-                const themeCounts = {};
-                snap.forEach((doc) => {
-                    const themes = doc.data().themes || [];
-                    themes.forEach((theme) => {
-                        themeCounts[theme] = (themeCounts[theme] || 0) + 1;
-                    });
-                });
-
-                const topThemes = Object.entries(themeCounts)
-                    .map(([theme, votes]) => ({ theme, votes }))
-                    .sort((a, b) => b.votes - a.votes)
-                    .slice(0, 6);
-
-        
-                const themesDisplay = document.getElementById('themesDisplay');
-                const themesList = document.getElementById('themesList');
-                themesList.innerHTML = topThemes
-                    .map(t => `<span style="margin: 0 8px;">${t.theme} (${t.votes} vote${t.votes > 1 ? 's' : ''})</span>`)
-                    .join('•');
-                themesDisplay.style.display = 'block';
-
-            
-                const genreIds = topThemes
-                    .map(t => themeToGenreId[t.theme.toLowerCase().trim()])
-                    .filter(Boolean)
-                    .slice(0, 3);
-
-                if (genreIds.length === 0) {
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('noResults').style.display = 'block';
-                    return;
-                }
-
-                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&with_genres=${genreIds.join(',')}&sort_by=popularity.desc&vote_average.gte=6&vote_count.gte=100`;
-                
-                const response = await fetch(url);
-                const data = await response.json();
-
-                document.getElementById('loading').style.display = 'none';
-
-                if (data.results && data.results.length > 0) {
-                    displayMovies(data.results.slice(0, 12));
-                } else {
-                    document.getElementById('noResults').style.display = 'block';
-                }
-
-            } catch (error) {
-                console.error('Error fetching results:', error);
-                document.getElementById('loading').textContent = 
-                    'Error loading movies. Please try again or check your TMDB API key.';
+            if (!data || data.length === 0) {
+                document.getElementById('loading').textContent =
+                    "No themes submitted yet. Add some themes first!";
+                return;
             }
-        }
 
-        function displayMovies(movies) {
-            const grid = document.getElementById('movieGrid');
-            grid.innerHTML = '';
-
-            movies.forEach(movie => {
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-
-                const posterUrl = movie.poster_path 
-                    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-                    : 'https://via.placeholder.com/300x450/1a1a1a/ffffff?text=No+Poster';
-
-                card.innerHTML = `
-                    <img src="${posterUrl}" 
-                         alt="${movie.title}"
-                         class="movie-poster"
-                         onerror="this.src='https://via.placeholder.com/300x450/1a1a1a/ffffff?text=No+Poster'">
-                    <div class="movie-title">${movie.title}</div>
-                    <div class="movie-rating">⭐ ${movie.vote_average.toFixed(1)}</div>
-                `;
-
-                card.onclick = () => {
-                    window.open(`https://www.themoviedb.org/movie/${movie.id}`, '_blank');
-                };
-
-                grid.appendChild(card);
+            // Convert input.json into themeCounts
+            const themeCounts = {};
+            data.forEach(item => {
+                themeCounts[item.word] = item.value;
             });
-        }
 
-        window.refreshResults = () => {
-            location.reload();
-        };
-        getMovieResults();
-    </script>
+            const topThemes = Object.entries(themeCounts)
+                .map(([theme, votes]) => ({ theme, votes }))
+                .sort((a, b) => b.votes - a.votes)
+                .slice(0, 6);
+
+            const themesDisplay = document.getElementById('themesDisplay');
+            const themesList = document.getElementById('themesList');
+            themesList.innerHTML = topThemes
+                .map(t => `<span style="margin: 0 8px;">${t.theme} (${t.votes})</span>`)
+                .join("•");
+            themesDisplay.style.display = "block";
+
+            // Convert themes -> TMDB genre IDs
+            const genreIds = topThemes
+                .map(t => themeToGenreId[t.theme.toLowerCase()])
+                .filter(Boolean)
+                .slice(0, 3);
+
+            if (genreIds.length === 0) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('noResults').style.display = 'block';
+                return;
+            }
+
+            const url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&with_genres=${genreIds.join(',')}&sort_by=popularity.desc&vote_average.gte=6&vote_count.gte=100`;
+
+            const movieRes = await fetch(url);
+            const movieData = await movieRes.json();
+
+            document.getElementById('loading').style.display = "none";
+
+            if (movieData.results && movieData.results.length > 0) {
+                displayMovies(movieData.results.slice(0, 12));
+            } else {
+                document.getElementById('noResults').style.display = "block";
+            }
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById('loading').textContent =
+                "Error loading results. Check your backend.";
+        }
+    }
+
+    function displayMovies(movies) {
+        const grid = document.getElementById('movieGrid');
+        grid.innerHTML = '';
+
+        movies.forEach(movie => {
+            const card = document.createElement('div');
+            card.className = "movie-card";
+
+            const posterUrl = movie.poster_path
+                ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+                : 'https://via.placeholder.com/300x450/1a1a1a/ffffff?text=No+Poster';
+
+            card.innerHTML = `
+                <img src="${posterUrl}" class="movie-poster">
+                <div class="movie-title">${movie.title}</div>
+                <div class="movie-rating">⭐ ${movie.vote_average.toFixed(1)}</div>
+            `;
+
+            card.onclick = () => window.open(`https://www.themoviedb.org/movie/${movie.id}`, "_blank");
+            grid.appendChild(card);
+        });
+    }
+
+    window.refreshResults = () => location.reload();
+
+    getMovieResults();
+</script>
+
 </body>
 </html>
