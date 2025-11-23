@@ -34,6 +34,21 @@ async function loadWordCloud() {
   }
 }
 
+
+generateBtn.addEventListener("click", () => {
+  const items = Array.from(list.querySelectorAll("li"));
+
+  if (items.length === 0) {
+    generatedMovieEl.textContent = "No movies available. Add some first!";
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * items.length);
+  const movieName = items[randomIndex].textContent;
+
+  generatedMovieEl.textContent = "Generated movie: " + movieName;
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("optionForm");
   const input = document.getElementById("optionInput");
