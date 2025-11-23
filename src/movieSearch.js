@@ -1,21 +1,8 @@
-import fetch from "node-fetch"; // Only needed if Node <18
-import 'dotenv/config';
-const TMDB_KEY = process.env.TMDB_KEY;
+
+const TMDB_KEY = "b469977fea8697c85b84fbad89a57be4"
 
 const themeToGenreId = {
   romantic: 10749,
-<<<<<<< HEAD
-  comedy: 35,
-  thriller: 53,
-  "found family": 10751,
-  action: 28,
-  mystery: 9648,
-  horror: 27,
-  fantasy: 14,
-  sciFi: 878,
-  adventure: 12,
-  drama: 18,
-=======
   romance: 10749,
   comedy: 35,
   funny: 35,
@@ -37,7 +24,6 @@ const themeToGenreId = {
   animation: 16,
   war: 10752,
   western: 37,
->>>>>>> bella
 };
 
 // ---------------------------
