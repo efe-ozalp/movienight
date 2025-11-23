@@ -196,7 +196,7 @@
 
     async function getMovieResults() {
         try {
-            // ⬇️ LOAD FROM YOUR JSON BACKEND, NOT FIRESTORE
+            
             const response = await fetch("/get_words");
             const data = await response.json();
 
@@ -206,7 +206,7 @@
                 return;
             }
 
-            // Convert input.json into themeCounts
+            
             const themeCounts = {};
             data.forEach(item => {
                 themeCounts[item.word] = item.value;
@@ -224,7 +224,7 @@
                 .join("•");
             themesDisplay.style.display = "block";
 
-            // Convert themes -> TMDB genre IDs
+           
             const genreIds = topThemes
                 .map(t => themeToGenreId[t.theme.toLowerCase()])
                 .filter(Boolean)
