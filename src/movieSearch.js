@@ -26,9 +26,6 @@ const themeToGenreId = {
   western: 37,
 };
 
-// ---------------------------
-// Map an array of theme strings to genre IDs
-// ---------------------------
 function mapThemesToGenres(themes) {
   const genreIds = [];
   themes.forEach((theme) => {
@@ -39,16 +36,12 @@ function mapThemesToGenres(themes) {
   return genreIds;
 }
 
-// ---------------------------
-// Search TMDB using top themes with votes
-// Guarantees movies are returned
-// ---------------------------
 export async function searchMoviesByThemes(topThemesWithVotes) {
-  // Sort themes by votes descending (most popular first)
+  
   const remainingThemes = [...topThemesWithVotes].sort((a, b) => b.votes - a.votes);
   let movies = [];
 
-  // 1️⃣ Try discover API using top genres, one at a time
+ 
   for (let i = 0; i < remainingThemes.length && movies.length === 0; i++) {
     const genreIds = mapThemesToGenres([remainingThemes[i].theme]);
     if (genreIds.length === 0) continue;
@@ -69,7 +62,7 @@ export async function searchMoviesByThemes(topThemesWithVotes) {
     }
   }
 
-  // 2️⃣ Fallback: search with all theme names as text
+  
   if (movies.length === 0) {
     const query = topThemesWithVotes.map((t) => t.theme).join(" ");
     const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(query)}`;
