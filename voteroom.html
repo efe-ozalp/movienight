@@ -26,6 +26,12 @@
   <div class="custom-option-container">
     <h3>Add a Movie Theme</h3>
 
+    <button id="generateMovieBtn" type="button" class="generate-btn">
+  Generate Movie
+</button>
+
+<div id="generatedMovie" class="generated-text"></div>
+
     <form id="optionForm" class="input-area">
       <input 
         id="optionInput"
@@ -47,6 +53,8 @@
     <h2>Word Cloud</h2>
     <canvas id="cloud_canvas"></canvas>
   </div>
+
+  
 
   <script>
     const bannedWords = [
