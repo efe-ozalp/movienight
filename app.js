@@ -18,7 +18,7 @@ function containsBannedWord(text) {
   return bannedWords.some(word => lower.includes(word));
 }
 
-// Function to load word cloud
+
 async function loadWordCloud() {
   const response = await fetch("/get_words");
   const data = await response.json();
