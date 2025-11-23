@@ -1,0 +1,269 @@
+/* ------------------------------------------------ */
+/* RESET + BASE STYLES */
+/* ------------------------------------------------ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+/* Cozy Dark Background */
+body {
+    height: 100vh;
+    background: #0b0a0d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ------------------------------------------------ */
+/* HOMEPAGE BACKGROUND OVERLAY */
+/* ------------------------------------------------ */
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(255, 195, 130, 0.15), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 150, 100, 0.10), transparent 40%),
+        url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=2000&q=80");
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.55) blur(1px);
+    z-index: 0;
+}
+
+/* ------------------------------------------------ */
+/* HOMEPAGE CONTENT */
+/* ------------------------------------------------ */
+
+.container {
+    z-index: 10;
+    text-align: center;
+    max-width: 700px;
+    padding: 20px;
+}
+
+.title {
+    font-size: 4rem;
+    color: #fff8f0;
+    font-weight: 800;
+    text-shadow: 0 6px 10px rgba(0, 0, 0, 0.6);
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #fce9d6;
+    opacity: 0.85;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.btn {
+    padding: 16px 40px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+    color: #2d1a0e;
+    background: linear-gradient(135deg, #ffd9a1, #ffb36b);
+    box-shadow: 0 8px 20px rgba(255, 180, 110, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 28px rgba(255, 180, 110, 0.4);
+}
+
+.btn.create:hover {
+    background: linear-gradient(135deg, #ffe5ba, #ffc17c);
+}
+
+.btn.join:hover {
+    background: linear-gradient(135deg, #ffd6c2, #ff9f8b);
+}
+
+/* ------------------------------------------------ */
+/* JOIN ROOM PAGE */
+/* ------------------------------------------------ */
+
+.join-body {
+    background: #0b0a0d;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    /* warm cinema glow */
+    background-image:
+        radial-gradient(circle at 20% 25%, rgba(255, 195, 130, 0.15), transparent 45%),
+        radial-gradient(circle at 80% 75%, rgba(255, 150, 100, 0.12), transparent 45%),
+        url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=2000&q=80");
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.55);
+}
+
+/* Join container */
+.join-container {
+    z-index: 10;
+    text-align: center;
+    padding: 30px;
+    background: rgba(20, 15, 12, 0.55);
+    border-radius: 18px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.join-title {
+    color: #fff5eb;
+    font-size: 3rem;
+    margin-bottom: 25px;
+    text-align: center;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.45);
+}
+
+/* Text input */
+.room-input {
+    width: 260px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    background: #fff2e0;
+    color: #3a1d0f;
+    margin-bottom: 20px;
+    box-shadow: 0 0 8px rgba(255, 200, 150, 0.25);
+}
+
+/* Join Button */
+.join-btn {
+    padding: 14px 40px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffd8a0, #ffb46c);
+    color: #2a150b;
+    box-shadow: 0 8px 15px rgba(255, 170, 100, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.join-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 12px 22px rgba(255, 170, 100, 0.35);
+}
+
+/* Back Button */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fce9d6;
+    cursor: pointer;
+    opacity: 0.75;
+    text-decoration: underline;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.back-btn:hover {
+    opacity: 1;
+    transform: translateX(-3px);
+}
+
+/* ------------------------------------------------ */
+/* VOTE ROOM */
+/* ------------------------------------------------ */
+
+.custom-option-container {
+    width: 400px;
+    background: rgba(20, 15, 12, 0.65);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    color: #fff5eb;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.input-area button {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    background: #ffb46c;
+    color: #2a150b;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+.input-area button:hover {
+    transform: scale(1.05);
+}
+
+.message {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.message.error {
+    color: #ff8b8b;
+}
+
+.message.success {
+    color: #a6ffb0;
+}
+
+.options-list {
+    list-style: none;
+    color: #fff5eb;
+}
+
+.options-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
