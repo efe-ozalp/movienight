@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase.js";
 
-// Create a room
+
 export async function createRoom(roomId) {
   const roomRef = doc(db, "rooms", roomId);
 
