@@ -1,27 +1,53 @@
-const fs = require('fs');
-const express = require('express');
+import fs from "fs";
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 app.use(express.json());
-app.use(express.static(__dirname)); // serve HTML, JS, CSS, JSON
+app.use(express.static(__dirname));
+
+function readData() {
+  const file = path.join(__dirname, "input.json");
+  if (!fs.existsSync(file)) fs.writeFileSync(file, "[]");
+  const raw = fs.readFileSync(file, "utf-8");
+  return JSON.parse(raw);
+}
+
+function writeData(data) {
+  const file = path.join(__dirname, "input.json");
+  fs.writeFileSync(file, JSON.stringify(data, null, 2));
+}
+
+app.get("/get_words", (req, res) => {
+  res.json(readData());
+});
 
 app.post("/add-word", (req, res) => {
-  const newWord = req.body.word;
+  let { word } = req.body;
+  if (!word || typeof word !== "string") return res.json({ success: false });
 
-  if (!fs.existsSync("input.json")) fs.writeFileSync("input.json", "[]");
-  const data = JSON.parse(fs.readFileSync("input.json"));
+  word = word.toLowerCase().trim();
+  const data = readData();
+  const existing = data.find(w => w.word === word);
 
-  const existing = data.find(w => w.word === newWord);
   if (existing) existing.value += 1;
-  else data.push({ word: newWord, value: 1 });
+  else data.push({ word, value: 1 });
 
-  fs.writeFileSync("input.json", JSON.stringify(data, null, 2));
+  writeData(data);
   res.json({ success: true, data });
 });
 
-app.get("/get_words", (req, res) => {
-  const data = JSON.parse(fs.readFileSync("input.json"));
-  res.json(data);
+app.post("/reset", (req, res) => {
+  writeData([]);
+  res.json({ success: true, data: [] });
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
